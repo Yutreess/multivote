@@ -5,41 +5,56 @@
 
         <nav th:replace="fragments :: navbar"></nav>
 
-        <h1>MultiVote</h1>
+        <div class="container">
+            <h1>MultiVote</h1>
 
-        <h3>Create Polls with Any Voting Method!</h3>
+            <h3>Create Polls with Any Voting Method!</h3>
 
-        <p>Some sites allow for a quick host of polls, like Survey Monkey and Strawpoll.
-        These platforms only offer a single voting system for all polls however, the dreaded Plurality Voting.
-        MultiVote is here for those who need the ability to create polls using whichever voting system they please!
-        MultiVote will be supporting the following voting systems.</p>
-
-        <div>
-            <h4>Plurality Voting</h4>
-            <p>The most common voting system in use for elections in the USA, Canada, the United Kingdom,
-            and many other nations. Each voter is given one vote to their favorite candidate. This works well for
-            elections with only 2 candidates. Plurality Voting elections with 3 or more however, usually results
-            in an unpopular winner that doesn't please the majority of voters.</p>
-
+            <p>Some sites allow for a quick host of polls, like Survey Monkey and Strawpoll.
+                These platforms only offer a single voting system for all polls however, the dreaded Plurality Voting.
+                MultiVote is here for those who need the ability to create polls using whichever voting system they please!
+                MultiVote will be supporting the following voting systems.</p>
         </div>
-        <div>
-            <h4>Ranked Choice Voting</h4>
-            <p>Used in Australia, Northern Ireland, the Republic of Ireland,  and New Zealand. Depending on the
-            variation, a voter is given one vote where said voter states how they want their vote transferred
-            if their number one choice loses. Alternatively, one variant assigns points to a preference number,
-            so that ballots can still be counted once and only once. Regardless of variant, the goal of
-            this system is to end strategic voting, and incentivise voting for one's actual preferred choice, without
-            risking their least popular candidate's victory.</p>
 
-        </div>
-        <div>
-            <h4>Approval Voting</h4>
-            <p>Used with some Green and Libertarian Parties in the USA, and Fargo, North Dakota. This system is a slight
-            modification of Plurality voting, expect voters are given more than one vote. Depending on the variant,
-            voters could be limited to a certain number of candidates, or have no limits on how many candidates they
-            can choose. This system is used primarily for its simplicity compared to some variants of
-            Ranked Choice Voting, while still decreasing strategic voting.</p>
+        <div class="container">
+            <div class="row">
+                <div class="col-4">
+                    <h4>Plurality Voting</h4>
+                    <p>The most common voting system in use for elections in the USA, Canada, the United Kingdom,
+                        and many other nations. Each voter is given one vote to their favorite candidate. This works well for
+                        elections with only 2 candidates. Plurality Voting elections with 3 or more however, usually results
+                        in an unpopular winner that doesn't please the majority of voters.</p>
 
+                </div>
+                <div class="col-4">
+                    <h4>Ranked Choice Voting</h4>
+                    <p>Used in Australia, Northern Ireland, the Republic of Ireland,  and New Zealand. Depending on the
+                        variation, a voter is given one vote where said voter states how they want their vote transferred
+                        if their number one choice loses. Alternatively, one variant assigns points to a preference number,
+                        so that ballots can still be counted once and only once. Regardless of variant, the goal of
+                        this system is to end strategic voting, and incentivise voting for one's actual preferred choice, without
+                        risking their least popular candidate's victory.</p>
+
+                </div>
+                <div class="col-4">
+                    <h4>Approval Voting</h4>
+                    <p>Used with some Green and Libertarian Parties in the USA, and Fargo, North Dakota. This system is a slight
+                        modification of Plurality voting, expect voters are given more than one vote. Depending on the variant,
+                        voters could be limited to a certain number of candidates, or have no limits on how many candidates they
+                        can choose. This system is used primarily for its simplicity compared to some variants of
+                        Ranked Choice Voting, while still decreasing strategic voting.</p>
+                </div>
+            </div>
         </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <button class="btn btn-lg btn-block btn-primary">Sign Up</button>
+                </div>
+            </div>
+        </div>
+
+
     </body>
 </html>
