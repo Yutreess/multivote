@@ -102,6 +102,14 @@ public class MainController {
         return "redirect:/";
     }
 
+    // FAQ Page
+    @RequestMapping(value = "faq")
+    public String faq(Model model)
+    {
+        model.addAttribute("title", "FAQ");
+        return "faq";
+    }
+
 
     // User home page
     @RequestMapping(value = "user-home/{userId}", method = RequestMethod.GET)
@@ -113,5 +121,6 @@ public class MainController {
         model.addAttribute("username", thisUser.getName());
         return "user-home.html";
     }
+
 
 }
