@@ -1,8 +1,11 @@
 package org.launchcode.multivote.controllers;
 
+import org.launchcode.multivote.models.Poll;
 import org.launchcode.multivote.models.User;
+import org.launchcode.multivote.models.data.PollDao;
 import org.launchcode.multivote.models.data.UserDao;
 import org.launchcode.multivote.models.forms.LoginForm;
+import org.launchcode.multivote.models.forms.PollForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -19,6 +23,9 @@ public class MainController {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PollDao pollDao;
 
     @RequestMapping(value="")
     public String index(Model model)
@@ -122,5 +129,39 @@ public class MainController {
         return "user-home.html";
     }
 
+    // Display Create Poll Form
+    @RequestMapping(value = "new-poll", method = RequestMethod.GET)
+    public String newPoll(Model model)
+    {
+        ArrayList<String> allVotingSystems = new ArrayList<>();
+        allVotingSystems.add("Plurality");
+        allVotingSystems.add("Ranked Choice");
+        allVotingSystems.add("Approval");
+
+        model.addAttribute("newPoll",new PollForm(allVotingSystems));
+        model.addAttribute("title", "Create Poll");
+
+        return "new-poll";
+    }
+
+    // Process Create Poll Form
+    public String insertNewPoll(Model model,
+                                @ModelAttribute @Valid PollForm pollForm,
+                                Errors errors)
+    {
+        if (errors.hasErrors())
+        {
+            return "new-poll";
+        }
+
+        String newPollName = pollForm.getName();
+        String newPollVotingSystem = pollForm.getVotingSystem();
+
+        Poll newPoll = new Poll(newPollName, newPollVotingSystem);
+
+        pollDao.save(newPoll);
+
+        return "redirect:/";
+    }
 
 }

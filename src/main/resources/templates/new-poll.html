@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+    <head th:replace="fragments :: head"></head>
+    <body>
+
+    <nav th:replace="fragments :: navbar"></nav>
+
+    <div class="container">
+
+        <form th:object="${newPoll}" method="POST" action="/new-poll">
+
+            <div class="form-group">
+                <label th:for="name">Name</label>
+                <input th:field="*{name}" class="form-control"/>
+                <span th:errors="*{name}" class="error"></span>
+            </div>
+
+            <div class="form-group">
+                <label th:for="votingSystem">Voting System</label>
+                <select name="votingSystem" class="custom-select">
+                    <option th:each="votingSystem : *{allVotingSystems}"
+                            th:value="${votingSystem}"
+                            th:text="${votingSystem}">
+                    </option>
+                </select>
+            </div>
+
+            <input class="form-control" type="submit" value="Create Poll"/>
+
+        </form>
+
+    </div>
+
+    </body>
+</html>
