@@ -40,7 +40,7 @@ public class PollForm {
         return votingSystem;
     }
 
-    public void setVotingSytem(String votingSystem) {
+    public void setVotingSystem(String votingSystem) {
         this.votingSystem = votingSystem;
     }
 
@@ -58,4 +58,6 @@ public class PollForm {
     public ArrayList<String> getAllVotingSystems() {
         return allVotingSystems;
     }
+
+
 }

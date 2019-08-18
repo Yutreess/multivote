@@ -8,6 +8,7 @@ import org.launchcode.multivote.models.forms.LoginForm;
 import org.launchcode.multivote.models.forms.PollForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -145,6 +146,7 @@ public class MainController {
     }
 
     // Process Create Poll Form
+    @RequestMapping(value = "new-poll", method = RequestMethod.POST)
     public String insertNewPoll(Model model,
                                 @ModelAttribute @Valid PollForm pollForm,
                                 Errors errors)
