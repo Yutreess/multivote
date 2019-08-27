@@ -47,6 +47,14 @@ public class User {
         this.password = password;
     }
 
+    public List<Poll> getPolls() {
+        return polls;
+    }
+
+    public void setPolls(List<Poll> polls) {
+        this.polls = polls;
+    }
+
     public int getId() {
         return id;
     }

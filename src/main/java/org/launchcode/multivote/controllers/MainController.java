@@ -129,6 +129,7 @@ public class MainController {
     public String userHome(Model model,
                            @PathVariable int userId)
     {
+        //ArrayList<Poll> userPolls = pollDao.findAllByUser(userId);
         User thisUser = userDao.findById(userId).get();
         model.addAttribute("title", "MultiVote User");
         model.addAttribute("user", thisUser);
