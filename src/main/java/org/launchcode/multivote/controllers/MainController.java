@@ -1,7 +1,9 @@
 package org.launchcode.multivote.controllers;
 
+import org.launchcode.multivote.models.Candidate;
 import org.launchcode.multivote.models.Poll;
 import org.launchcode.multivote.models.User;
+import org.launchcode.multivote.models.data.CandidateDao;
 import org.launchcode.multivote.models.data.PollDao;
 import org.launchcode.multivote.models.data.UserDao;
 import org.launchcode.multivote.models.forms.LoginForm;
@@ -21,6 +23,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 public class MainController {
+
+    @Autowired
+    private CandidateDao candidateDao;
 
     @Autowired
     private UserDao userDao;
@@ -151,6 +156,7 @@ public class MainController {
     // Process Create Poll Form
     @RequestMapping(value = "new-poll", method = RequestMethod.POST)
     public String createNewPoll(Model model,
+                                //@RequestParam("candidates") ArrayList<String> newCandidates,
                                 @ModelAttribute @Valid PollForm pollForm,
                                 Errors errors)
     {
@@ -167,6 +173,13 @@ public class MainController {
         newPoll.setUser(thisUser);
 
         pollDao.save(newPoll);
+
+        for(String candidateName : pollForm.getCandidates())
+        {
+            Candidate newCandidate = new Candidate(candidateName);
+            newCandidate.setPoll(newPoll);
+            candidateDao.save(newCandidate);
+        }
 
         return "redirect:/user-home/" + pollForm.getUserId();
     }

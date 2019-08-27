@@ -25,6 +25,20 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label th:for="candidates">Candidate 1</label>
+                <input th:field="*{candidates}" class="form-control" />
+                <span th:errors="*{name}" class="error"></span>
+
+                <label th:for="candidates">Candidate 2</label>
+                <input th:field="*{candidates}" class="form-control" />
+                <span th:errors="*{name}" class="error"></span>
+
+                <label th:for="candidates">Candidate 3</label>
+                <input th:field="*{candidates}" class="form-control" />
+                <span th:errors="*{name}" class="error"></span>
+            </div>
+
             <input type="hidden" name="userId" th:value="${user.id}"/>
 
             <input class="form-control" type="submit" value="Create Poll"/>

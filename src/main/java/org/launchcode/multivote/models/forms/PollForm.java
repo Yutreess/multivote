@@ -1,5 +1,6 @@
 package org.launchcode.multivote.models.forms;
 
+import org.launchcode.multivote.models.Candidate;
 import org.launchcode.multivote.models.Poll;
 
 import javax.validation.constraints.NotNull;
@@ -8,10 +9,8 @@ import java.util.ArrayList;
 
 public class PollForm {
 
-    // Rendering
     private ArrayList<String> allVotingSystems;
 
-    // Processing
     @NotNull
     private int userId;
 
@@ -21,10 +20,10 @@ public class PollForm {
 
     @NotNull
     private String votingSystem;
-/*
+
     @NotNull
+    @Size(min = 1)
     private ArrayList<String> candidates;
-*/
 
     public PollForm () {}
 
@@ -57,16 +56,13 @@ public class PollForm {
         this.votingSystem = votingSystem;
     }
 
-/*
     public ArrayList<String> getCandidates() {
         return candidates;
     }
-*/
-/*
+
     public void setCandidates(ArrayList<String> candidates) {
         this.candidates = candidates;
     }
-*/
 
     public ArrayList<String> getAllVotingSystems() {
         return allVotingSystems;
