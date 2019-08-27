@@ -27,8 +27,17 @@
                 </li>
             </ul>
 
-            <h3 class="navbar-brand"
-                th:text="${username}"></h3>
+            <!-- Display "MultiVote" if no user is logged in,
+                 Display the username if one is -->
+            <div th:if="${user}">
+                <h3 class="navbar-brand"
+                    th:text="${user.name}"></h3>
+            </div>
+
+            <div th:unless="${user}">
+                <h3 class="navbar-brand">MultiVote</h3>
+            </div>
+
 
         </div>
 

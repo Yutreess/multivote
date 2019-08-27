@@ -126,14 +126,16 @@ public class MainController {
     {
         User thisUser = userDao.findById(userId).get();
         model.addAttribute("title", "MultiVote User");
-        model.addAttribute("username", thisUser.getName());
-        return "user-home.html";
+        model.addAttribute("user", thisUser);
+        return "user-home";
     }
 
     // Display Create Poll Form
-    @RequestMapping(value = "new-poll", method = RequestMethod.GET)
-    public String newPoll(Model model)
+    @RequestMapping(value = "new-poll/{userId}", method = RequestMethod.GET)
+    public String newPoll(Model model,
+                          @PathVariable int userId)
     {
+        User thisUser = userDao.findById(userId).get();
         ArrayList<String> allVotingSystems = new ArrayList<>();
         allVotingSystems.add("Plurality");
         allVotingSystems.add("Ranked Choice");
@@ -141,29 +143,31 @@ public class MainController {
 
         model.addAttribute("newPoll",new PollForm(allVotingSystems));
         model.addAttribute("title", "Create Poll");
+        model.addAttribute("user", thisUser);
 
         return "new-poll";
     }
 
     // Process Create Poll Form
     @RequestMapping(value = "new-poll", method = RequestMethod.POST)
-    public String insertNewPoll(Model model,
+    public String createNewPoll(Model model,
                                 @ModelAttribute @Valid PollForm pollForm,
                                 Errors errors)
     {
         if (errors.hasErrors())
         {
-            return "new-poll";
+            return "redirect:/new-poll/" + pollForm.getUserId();
         }
 
+        User thisUser = userDao.findById(pollForm.getUserId()).get();
         String newPollName = pollForm.getName();
         String newPollVotingSystem = pollForm.getVotingSystem();
 
-        Poll newPoll = new Poll(newPollName, newPollVotingSystem);
+        Poll newPoll = new Poll(newPollName, newPollVotingSystem, thisUser);
 
         pollDao.save(newPoll);
 
-        return "redirect:/";
+        return "redirect:/user-home/" + pollForm.getUserId();
     }
 
 }

@@ -1,12 +1,8 @@
 package org.launchcode.multivote.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Poll {
@@ -22,18 +18,35 @@ public class Poll {
     @NotNull
     private String votingSystem;
 
+    @OneToOne(mappedBy = "poll")
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Poll() {}
 
-    public Poll(String name, String votingSystem)
+    public Poll(String name, String votingSystem, User user)
     {
         this.name = name;
         this.votingSystem = votingSystem;
+        this.user = user;
     }
 
-/*
-    @NotNull
-    private ArrayList<String> candidates;
-*/
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getVotingSystem() {
         return votingSystem;
     }
@@ -41,15 +54,7 @@ public class Poll {
     public void setVotingSystem(String votingSystem) {
         this.votingSystem = votingSystem;
     }
-/*
-    public List<String> getCandidates() {
-        return candidates;
-    }
 
-    public void setCandidates(ArrayList<String> candidates) {
-        this.candidates = candidates;
-    }
-*/
     public int getId() {
         return id;
     }
