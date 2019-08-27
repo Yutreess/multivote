@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 public class Poll {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
@@ -18,8 +18,8 @@ public class Poll {
     @NotNull
     private String votingSystem;
 
-    @OneToOne(mappedBy = "poll")
-    @JoinColumn(name = "user_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_user_id")
     private User user;
 
     public Poll() {}

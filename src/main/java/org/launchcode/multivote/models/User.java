@@ -17,12 +17,12 @@ public class User {
     private String password;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne//(mappedBy = "user")
-    @JoinColumn(name = "poll_id")
-    private Poll poll;
+    @OneToMany(mappedBy = "user")
+    //@JoinColumn(name = "owned_poll_id")
+    private List<Poll> polls = new ArrayList<>();
 
     public User() {}
 

@@ -164,6 +164,7 @@ public class MainController {
         String newPollVotingSystem = pollForm.getVotingSystem();
 
         Poll newPoll = new Poll(newPollName, newPollVotingSystem, thisUser);
+        newPoll.setUser(thisUser);
 
         pollDao.save(newPoll);
 
