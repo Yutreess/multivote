@@ -161,13 +161,12 @@ public class MainController {
                                 @ModelAttribute @Valid PollForm pollForm,
                                 Errors errors)
     {
-        ArrayList<Candidate> candidateList = new ArrayList<>();
-
         if (errors.hasErrors())
         {
             return "redirect:/new-poll/" + pollForm.getUserId();
         }
 
+        ArrayList<Candidate> candidateList = new ArrayList<>();
         User thisUser = userDao.findById(pollForm.getUserId()).get();
         String newPollName = pollForm.getName();
         String newPollVotingSystem = pollForm.getVotingSystem();
@@ -175,16 +174,21 @@ public class MainController {
         Poll newPoll = new Poll(newPollName, newPollVotingSystem, thisUser);
         newPoll.setUser(thisUser);
 
-        pollDao.save(newPoll);
-
         for(String candidateName : pollForm.getCandidates())
         {
-            Candidate newCandidate = new Candidate(candidateName);
-            newCandidate.setPoll(newPoll);
-            candidateDao.save(newCandidate);
+            if(!candidateName.equals(""))
+            {
+                Candidate newCandidate = new Candidate(candidateName);
+                newCandidate.setPoll(newPoll);
+                candidateDao.save(newCandidate);
 
-            candidateList.add(newCandidate);
+                candidateList.add(newCandidate);
+                newPoll.setCandidates(candidateList);
+            }
         }
+
+        pollDao.save(newPoll);
+
 
         return "redirect:/user-home/" + pollForm.getUserId();
     }
@@ -196,7 +200,7 @@ public class MainController {
     {
         Poll thisPoll = pollDao.findById(pollId).get();
         model.addAttribute("poll", thisPoll);
-        model.addAttribute("title", thisPoll.getCandidates().get(0));
+        //model.addAttribute("title", thisPoll.getCandidates());
         return "poll";
     }
 

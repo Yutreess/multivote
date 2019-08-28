@@ -14,7 +14,7 @@ public class Candidate {
     @Size(min = 1)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Poll poll;
 
     public Candidate() {}

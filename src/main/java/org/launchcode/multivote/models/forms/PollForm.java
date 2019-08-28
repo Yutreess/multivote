@@ -2,6 +2,7 @@ package org.launchcode.multivote.models.forms;
 
 import org.launchcode.multivote.models.Candidate;
 import org.launchcode.multivote.models.Poll;
+import org.springframework.beans.factory.annotation.Required;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -21,8 +22,7 @@ public class PollForm {
     @NotNull
     private String votingSystem;
 
-    @NotNull
-    @Size(min = 1)
+    //@Size//(min = 0)
     private ArrayList<String> candidates;
 
     public PollForm () {}
