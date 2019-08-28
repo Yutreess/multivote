@@ -9,7 +9,11 @@
             <div class="row">
                 <div class="col text-center">
                     <div th:each="poll : ${user.polls}">
-                        <h2 th:text="${poll.name}"></h2>
+                        <a th:href="@{/poll/} + ${poll.id}">
+                            <h2 th:text="${poll.name}">
+
+                            </h2>
+                        </a>
                     </div>
                     <form th:action="@{/new-poll/} + ${user.id}">
                         <button class="btn btn-lg btn-block btn-primary">Create Poll</button>

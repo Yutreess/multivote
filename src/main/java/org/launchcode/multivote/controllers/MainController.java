@@ -161,6 +161,8 @@ public class MainController {
                                 @ModelAttribute @Valid PollForm pollForm,
                                 Errors errors)
     {
+        ArrayList<Candidate> candidateList = new ArrayList<>();
+
         if (errors.hasErrors())
         {
             return "redirect:/new-poll/" + pollForm.getUserId();
@@ -180,9 +182,22 @@ public class MainController {
             Candidate newCandidate = new Candidate(candidateName);
             newCandidate.setPoll(newPoll);
             candidateDao.save(newCandidate);
+
+            candidateList.add(newCandidate);
         }
 
         return "redirect:/user-home/" + pollForm.getUserId();
+    }
+
+    // Main Poll page
+    @RequestMapping(value = "poll/{pollId}")
+    public String poll(Model model,
+                       @PathVariable int pollId)
+    {
+        Poll thisPoll = pollDao.findById(pollId).get();
+        model.addAttribute("poll", thisPoll);
+        model.addAttribute("title", thisPoll.getCandidates().get(0));
+        return "poll";
     }
 
 }
