@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+    <head th:replace="fragments :: head"></head>
+    <body>
+
+
+        <nav th:replace="fragments :: navbar"></nav>
+
+        <div class="container">
+
+            <h1 th:text="${poll.name} + ' : ' + ${poll.votingSystem}"></h1>
+
+            <form th:action="@{/poll/vote/}" method="POST" th:object="${pluralityVoteForm}">
+
+                <div class="form-group">
+                    <label th:for="*{chosenCandidateId}">Vote for ONE</label>
+                    <select th:field="*{chosenCandidateId}">
+                        <option th:each="candidate : *{candidates}"
+                                th:value="${candidate.id}"
+                                th:text="${candidate.name}">
+                        </option>
+                    </select>
+                    <span th:errors="*{chosenCandidateId}" class="error"></span>
+                </div>
+
+                <input type="hidden" th:field="*{pollId}" th:value="${poll.id}"/>
+                <input class="form-control" type="submit" value="Submit Vote"/>
+
+            </form>
+
+        </div>
+
+    </body>
+</html>

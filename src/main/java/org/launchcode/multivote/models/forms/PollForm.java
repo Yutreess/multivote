@@ -22,7 +22,8 @@ public class PollForm {
     @NotNull
     private String votingSystem;
 
-    //@Size//(min = 0)
+    @Size(min = 1)
+    @NotNull
     private ArrayList<String> candidates;
 
     public PollForm () {}

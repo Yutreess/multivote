@@ -23,6 +23,7 @@
                             th:text="${votingSystem}">
                     </option>
                 </select>
+                <span th:errors="*{votingSystem}" class="error"></span>
             </div>
 
             <div class="form-group">
