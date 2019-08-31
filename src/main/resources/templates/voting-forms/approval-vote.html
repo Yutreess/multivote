@@ -5,5 +5,35 @@
 
         <nav th:replace="fragments :: navbar"></nav>
 
+    <div class="container">
+
+        <h1 th:text="${poll.name} + ' : ' + ${poll.votingSystem}"></h1>
+
+        <form th:action="@{/poll/vote/approval}" th:object="${approvalVoteForm}" method="POST">
+
+            <div class="form-group">
+
+                <div th:each="candidate : *{candidates}" class="custom-control custom-checkbox">
+                    <input name="chosenCandidateIds"
+                           th:id="'candidate' + ${candidate.id}"
+                           th:value="${candidate.id}"
+                           type="checkbox" class="custom-control-input" checked="" />
+
+                    <label th:for="'candidate' + ${candidate.id}" th:text="${candidate.name}" class="custom-control-label" ></label>
+                    <span th:errors="*{chosenCandidateIds}" class="error"></span>
+                </div>
+                <!-- th:field="*{chosenCandidateIds}" -->
+
+                <input type="hidden" th:field="*{pollId}" th:value="${poll.id}"/>
+
+                <input class="form-control" type="submit" value="Submit Vote(s)" />
+
+
+            </div>
+
+        </form>
+
+    </div>
+
     </body>
 </html>

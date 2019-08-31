@@ -10,7 +10,7 @@
 
             <h1 th:text="${poll.name} + ' : ' + ${poll.votingSystem}"></h1>
 
-            <form th:action="@{/poll/vote/}" method="POST" th:object="${pluralityVoteForm}">
+            <form th:action="@{/poll/vote/plurality}" method="POST" th:object="${pluralityVoteForm}">
 
                 <div class="form-group">
                     <label th:for="*{chosenCandidateId}">Vote for ONE</label>

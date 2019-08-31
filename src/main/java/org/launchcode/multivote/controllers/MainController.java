@@ -1,6 +1,5 @@
 package org.launchcode.multivote.controllers;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.launchcode.multivote.models.Candidate;
 import org.launchcode.multivote.models.Poll;
 import org.launchcode.multivote.models.User;
@@ -12,15 +11,12 @@ import org.launchcode.multivote.models.forms.PluralityVoteForm;
 import org.launchcode.multivote.models.forms.PollForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -194,77 +190,6 @@ public class MainController {
 
 
         return "redirect:/user-home/" + pollForm.getUserId();
-    }
-
-    // Main Poll page
-    @RequestMapping(value = "poll/{pollId}")
-    public String poll(Model model,
-                       @PathVariable int pollId)
-    {
-        Poll thisPoll = pollDao.findById(pollId).get();
-        model.addAttribute("poll", thisPoll);
-        //model.addAttribute("title", thisPoll.getCandidates());
-        return "poll";
-    }
-
-    // Vote Form
-    @RequestMapping(value = "poll/vote/{pollId}", method = RequestMethod.GET)
-    public String voteForms(Model model,
-                            @PathVariable int pollId)
-    {
-        Poll thisPoll = pollDao.findById(pollId).get();
-        model.addAttribute("poll", thisPoll);
-
-        if(thisPoll.getVotingSystem().equals("Ranked Choice"))
-        {
-            return "voting-forms/ranked-choice-vote";
-        }
-
-        if(thisPoll.getVotingSystem().equals("Approval"))
-        {
-            return "voting-forms/approval-vote";
-        }
-
-        else
-        {
-            ArrayList<Candidate> candidates = new ArrayList<>(thisPoll.getCandidates());
-
-            //candidates.addAll(thisPoll.getCandidates());
-            PluralityVoteForm pluralityVoteForm = new PluralityVoteForm(thisPoll.getVotingSystem(), candidates);
-            pluralityVoteForm.setPollId(thisPoll.getId());
-            model.addAttribute("pluralityVoteForm", pluralityVoteForm);
-            return "voting-forms/plurality-vote";
-        }
-    }
-
-    // Process Plurality Votes
-    @RequestMapping(value = "poll/vote", method = RequestMethod.POST)
-    public String processPluralityVote(Model model,
-                              @ModelAttribute("pluralityVoteForm") @Valid PluralityVoteForm pluralityVoteForm,
-                              Errors errors)
-    {
-        if(errors.hasErrors())
-        {
-            System.out.println("Errors: " + errors.getAllErrors());
-            return "voting-forms/plurality-vote";
-            //return "redirect:/poll/vote/" + pluralityVoteForm.getPollId();
-        }
-
-        int chosenCandidateId = pluralityVoteForm.getChosenCandidateId();
-        Poll thisPoll = pollDao.findById(pluralityVoteForm.getPollId()).get();
-        ArrayList<Candidate> candidates = new ArrayList<>(thisPoll.getCandidates());
-
-        //TODO: Use Cnadidate ID's instead of names, use names only for display
-        for(Candidate candidate : candidates)
-        {
-            if(candidate.getId() == chosenCandidateId)
-            {
-                candidate.incrementVotes();
-                candidateDao.save(candidate);
-            }
-        }
-
-        return "redirect:/poll/" + pluralityVoteForm.getPollId();
     }
 
 }

@@ -1,5 +1,7 @@
 package org.launchcode.multivote.models;
 
+import org.launchcode.multivote.models.forms.ApprovalVoteForm;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -22,6 +24,9 @@ public class Candidate {
 
     // Allowing a null property in cas ethe voting system isn't appropriate
     private int numPluralityVotes;
+
+    // FOr Approval Votes
+    private int numApprovalVotes;
 
     /*
     // Ranked Choice Vote counters
@@ -89,9 +94,15 @@ public class Candidate {
     }
 
     // Plurality Counting
-    public void incrementVotes()
+    public void incrementPluralityVotes()
     {
         this.numPluralityVotes++;
+    }
+
+    // Approval Counting
+    public void incrementApprovalVotes()
+    {
+        this.numApprovalVotes++;
     }
 
     public int getNumPluralityVotes() {
