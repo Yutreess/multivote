@@ -14,10 +14,35 @@
         <h1 th:text="${poll.name}">Poll Name</h1>
         <h2 class="text-center" th:text="${poll.votingSystem}"></h2>
 
-        <h3>Candidates</h3>
+        <div class="row">
+            <div class="col-6">
+                <h3 class="text-center">Candidates</h3>
 
-        <h4 th:each="candidate : ${poll.candidates}"
-            th:text="${candidate.name}"></h4>
+                <h4 th:each="candidate : ${poll.candidates}"
+                    th:text="${candidate.name}"
+                    class="text-center"></h4>
+            </div>
+            <div class="col-6">
+                <div th:if="${poll.votingSystem == 'Approval'} ">
+                    <h3 class="text-center">Votes</h3>
+
+                    <h4 th:each="candidate : ${poll.candidates}"
+                        th:text="${candidate.numApprovalVotes}"
+                        class="text-center"
+                    ></h4>
+                </div>
+                <div th:if="${poll.votingSystem == 'Plurality'} ">
+                    <h3 class="text-center">Votes</h3>
+
+                    <h4 th:each="candidate : ${poll.candidates}"
+                        th:text="${candidate.numPluralityVotes}"
+                        class="text-center"
+                    ></h4>
+                </div>
+
+            </div>
+        </div>
+
 
         <form th:action="@{/poll/vote/} + ${poll.id}">
             <button class="btn btn-success btn-block">Vote</button>

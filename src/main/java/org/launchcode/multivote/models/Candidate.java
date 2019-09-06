@@ -25,41 +25,29 @@ public class Candidate {
     // Allowing a null property in cas ethe voting system isn't appropriate
     private int numPluralityVotes;
 
-    // FOr Approval Votes
+    // For Approval Votes
     private int numApprovalVotes;
 
-    /*
     // Ranked Choice Vote counters
-    @NotNull
-    private int numOneVotes;
+    private int rank1Votes;
 
-    @NotNull
-    private int numTwoVotes;
+    private int rank2Votes;
 
-    @NotNull
-    private int numThreeVotes;
+    private int rank3Votes;
 
-    @NotNull
-    private int numFourVotes;
+    private int rank4Votes;
 
-    @NotNull
-    private int numFiveVotes;
+    private int rank5Votes;
 
-    @NotNull
-    private int numSixVotes;
+    private int rank6Votes;
 
-    @NotNull
-    private int numSevenVotes;
+    private int rank7Votes;
 
-    @NotNull
-    private int numEightVotes;
+    private int rank8Votes;
 
-    @NotNull
-    private int numNineVotes;
+    private int rank9Votes;
 
-    @NotNull
-    private int numTenVotes;
-    */
+    private int rank10Votes;
 
     public Candidate() {}
 
@@ -68,7 +56,37 @@ public class Candidate {
         this.name = name;
     }
 
+    // Ranked Choice Counting
+
+    public void incrementRank1Votes() {this.rank1Votes++;}
+    public void incrementRank2Votes() {this.rank2Votes++;}
+    public void incrementRank3Votes() {this.rank3Votes++;}
+    public void incrementRank4Votes() {this.rank4Votes++;}
+    public void incrementRank5Votes() {this.rank5Votes++;}
+    public void incrementRank6Votes() {this.rank6Votes++;}
+    public void incrementRank7Votes() {this.rank7Votes++;}
+    public void incrementRank8Votes() {this.rank8Votes++;}
+    public void incrementRank9Votes() {this.rank9Votes++;}
+    public void incrementRank10Votes() {this.rank10Votes++;}
+
+    // Plurality Counting
+    public void incrementPluralityVotes()
+    {
+        this.numPluralityVotes++;
+    }
+
+    // Approval Counting
+    public void incrementApprovalVotes()
+    {
+        this.numApprovalVotes++;
+    }
+
     // Getters and Setters
+
+    public int getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
@@ -93,17 +111,99 @@ public class Candidate {
         this.votingSystem = votingSystem;
     }
 
-    // Plurality Counting
-    public void incrementPluralityVotes()
-    {
-        this.numPluralityVotes++;
+    // Ranked Choice
+
+
+    public int getRank1Votes() {
+        return rank1Votes;
     }
 
-    // Approval Counting
-    public void incrementApprovalVotes()
-    {
-        this.numApprovalVotes++;
+    public void setRank1Votes(int rank1Votes) {
+        this.rank1Votes = rank1Votes;
     }
+
+    public int getRank2Votes() {
+        return rank2Votes;
+    }
+
+    public void setRank2Votes(int rank2Votes) {
+        this.rank2Votes = rank2Votes;
+    }
+
+    public int getRank3Votes() {
+        return rank3Votes;
+    }
+
+    public void setRank3Votes(int rank3Votes) {
+        this.rank3Votes = rank3Votes;
+    }
+
+    public int getRank4Votes() {
+        return rank4Votes;
+    }
+
+    public void setRank4Votes(int rank4Votes) {
+        this.rank4Votes = rank4Votes;
+    }
+
+    public int getRank5Votes() {
+        return rank5Votes;
+    }
+
+    public void setRank5Votes(int rank5Votes) {
+        this.rank5Votes = rank5Votes;
+    }
+
+    public int getRank6Votes() {
+        return rank6Votes;
+    }
+
+    public void setRank6Votes(int rank6Votes) {
+        this.rank6Votes = rank6Votes;
+    }
+
+    public int getRank7Votes() {
+        return rank7Votes;
+    }
+
+    public void setRank7Votes(int rank7Votes) {
+        this.rank7Votes = rank7Votes;
+    }
+
+    public int getRank8Votes() {
+        return rank8Votes;
+    }
+
+    public void setRank8Votes(int rank8Votes) {
+        this.rank8Votes = rank8Votes;
+    }
+
+    public int getRank9Votes() {
+        return rank9Votes;
+    }
+
+    public void setRank9Votes(int rank9Votes) {
+        this.rank9Votes = rank9Votes;
+    }
+
+    public int getRank10Votes() {
+        return rank10Votes;
+    }
+
+    public void setRank10Votes(int rank10Votes) {
+        this.rank10Votes = rank10Votes;
+    }
+
+    // Approval
+    public int getNumApprovalVotes() {
+        return numApprovalVotes;
+    }
+
+    public void setNumApprovalVotes(int numApprovalVotes) {
+        this.numApprovalVotes = numApprovalVotes;
+    }
+
+    // Plurality
 
     public int getNumPluralityVotes() {
         return numPluralityVotes;
@@ -113,7 +213,4 @@ public class Candidate {
         this.numPluralityVotes = numPluralityVotes;
     }
 
-    public int getId() {
-        return id;
-    }
 }

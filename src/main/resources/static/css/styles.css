@@ -7,3 +7,7 @@ ul .navbar-item {
 
     align: center;
 }
+
+input[type="radio"]{
+    -webkit-appearance: radio;
+}

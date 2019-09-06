@@ -7,6 +7,7 @@ import org.launchcode.multivote.models.data.PollDao;
 import org.launchcode.multivote.models.data.UserDao;
 import org.launchcode.multivote.models.forms.ApprovalVoteForm;
 import org.launchcode.multivote.models.forms.PluralityVoteForm;
+import org.launchcode.multivote.models.forms.RCVForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,10 +54,14 @@ public class PollController {
 
         if(thisPoll.getVotingSystem().equals("Ranked Choice"))
         {
+            RCVForm rankedChoiceForm = new RCVForm(thisPoll.getVotingSystem(), candidates);
+            rankedChoiceForm.setPollId(thisPoll.getId());
+            model.addAttribute("rankedChoiceForm", rankedChoiceForm);
+
             return "voting-forms/ranked-choice-vote";
         }
 
-        if(thisPoll.getVotingSystem().equals("Approval"))
+        else if(thisPoll.getVotingSystem().equals("Approval"))
         {
             ApprovalVoteForm approvalVoteForm = new ApprovalVoteForm(thisPoll.getVotingSystem(), candidates);
             approvalVoteForm.setPollId(thisPoll.getId());
@@ -138,5 +143,92 @@ public class PollController {
 
 
         return "redirect:/poll/" + approvalVoteForm.getPollId();
+    }
+
+    // Ranked Choice Votes
+    @RequestMapping(value = "vote/rankedChoice", method = RequestMethod.POST)
+    public String countRCVotes(Model model,
+                               @ModelAttribute("rankedChoiceForm") @Valid
+                               RCVForm rankedChoiceForm,
+                               Errors errors)
+    {
+        if (errors.hasErrors() || !rankedChoiceForm.checkVotesAreUnique())
+        {
+            System.out.println(rankedChoiceForm);
+            System.out.println("Errors: " + errors.getAllErrors());
+            voteForms(model, rankedChoiceForm.getPollId());
+            return "voting-forms/ranked-choice-vote";
+        }
+
+        Poll thisPoll = pollDao.findById(rankedChoiceForm.getPollId()).get();
+        ArrayList<Candidate> candidates = new ArrayList<>(thisPoll.getCandidates());
+
+        // Check for all 10 possible votes
+
+        for (Candidate candidate : candidates)
+        {
+
+            if (rankedChoiceForm.getRank1Candidate() == candidate.getId())
+            {
+                candidate.incrementRank1Votes();
+                candidateDao.save(candidate);
+            }
+
+            else if (rankedChoiceForm.getRank2Candidate() == candidate.getId())
+            {
+                candidate.incrementRank2Votes();
+                candidateDao.save(candidate);
+            }
+
+            else if (rankedChoiceForm.getRank3Candidate() == candidate.getId())
+            {
+                candidate.incrementRank3Votes();
+                candidateDao.save(candidate);
+            }
+
+            else if (rankedChoiceForm.getRank4Candidate() == candidate.getId())
+            {
+                candidate.incrementRank4Votes();
+                candidateDao.save(candidate);
+            }
+
+            else if (rankedChoiceForm.getRank5Candidate() == candidate.getId())
+            {
+                candidate.incrementRank5Votes();
+                candidateDao.save(candidate);
+            }
+
+            else if (rankedChoiceForm.getRank6Candidate() == candidate.getId())
+            {
+                candidate.incrementRank6Votes();
+                candidateDao.save(candidate);
+            }
+
+            else if (rankedChoiceForm.getRank7Candidate() == candidate.getId())
+            {
+                candidate.incrementRank7Votes();
+                candidateDao.save(candidate);
+            }
+
+            else if (rankedChoiceForm.getRank8Candidate() == candidate.getId())
+            {
+                candidate.incrementRank8Votes();
+                candidateDao.save(candidate);
+            }
+
+            else if (rankedChoiceForm.getRank9Candidate() == candidate.getId())
+            {
+                candidate.incrementRank9Votes();
+                candidateDao.save(candidate);
+            }
+
+            else if (rankedChoiceForm.getRank10Candidate() == candidate.getId())
+            {
+                candidate.incrementRank10Votes();
+                candidateDao.save(candidate);
+            }
+        }
+
+        return "redirect:/poll/" + rankedChoiceForm.getPollId();
     }
 }

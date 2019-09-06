@@ -60,4 +60,6 @@ public class ApprovalVoteForm {
     public void setChosenCandidateIds(ArrayList<Integer> chosenCandidateIds) {
         this.chosenCandidateIds = chosenCandidateIds;
     }
+
+
 }

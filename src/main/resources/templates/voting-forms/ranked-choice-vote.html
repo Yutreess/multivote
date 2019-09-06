@@ -5,5 +5,66 @@
 
         <nav th:replace="fragments :: navbar"></nav>
 
+        <div class="container">
+
+            <h1 th:text="${poll.name} + ' : ' + ${poll.votingSystem}"></h1>
+
+            <form th:action="@{/poll/vote/rankedChoice}" th:object="${rankedChoiceForm}" method="POST">
+
+                <div class="form-group">
+
+                    <div th:each="candidate,index : *{candidates}">
+                        <label  th:for="*{rank1Candidate}"
+                                th:text="'Rank ' + ${index.count} + ' Vote'">
+                            Rank # Vote
+                        </label>
+                        <select th:name="'rank' + ${index.count} + 'Candidate'"
+                                th:id="'rank' + ${index.count} + 'Candidate'">
+                            <option value="0" selected="selected">No Selection</option>
+                            <option th:each="candidate : *{candidates}"
+                                    th:value="${candidate.id}"
+                                    th:text="${candidate.name}">
+
+                            </option>
+                        </select>
+                        <span th:error="*{rank1Candidate}" class="error"></span>
+                    </div>
+
+
+                    <!-- RADIO TABLE
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Candidates
+                                </th>
+                                <th th:each="candidate,index : *{candidates}"
+                                    th:text="${index.count}">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="candidate,index : *{candidates}">
+                                <th th:text="${candidate.name}"></th>
+                                <td th:each="candidate,index : *{candidates}">
+                                    <input  type="radio"
+                                            th:field="*{rank1Candidate}"
+                                            th:value="${candidate.id}"
+                                            class="custom-control-input"/>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                    -->
+                </div>
+
+                <input type="hidden" th:field="*{pollId}" th:value="${poll.id}"/>
+
+                <input class="form-control" type="submit" value="Submit Vote(s)"/>
+            </form>
+
+        </div>
+
     </body>
 </html>
