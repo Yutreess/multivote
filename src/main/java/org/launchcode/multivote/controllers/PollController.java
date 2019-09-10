@@ -2,6 +2,7 @@ package org.launchcode.multivote.controllers;
 
 import org.launchcode.multivote.models.Candidate;
 import org.launchcode.multivote.models.Poll;
+import org.launchcode.multivote.models.User;
 import org.launchcode.multivote.models.data.CandidateDao;
 import org.launchcode.multivote.models.data.PollDao;
 import org.launchcode.multivote.models.data.UserDao;
@@ -14,8 +15,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Controller
 @RequestMapping("/poll/")
@@ -83,7 +87,9 @@ public class PollController {
     public String processPluralityVote(Model model,
                                        @ModelAttribute("pluralityVoteForm") @Valid
                                        PluralityVoteForm pluralityVoteForm,
-                                       Errors errors)
+                                       Errors errors,
+                                       @CookieValue(value = "username")
+                                       String votersUsername)
     {
         if(errors.hasErrors())
         {
@@ -92,6 +98,7 @@ public class PollController {
             //return "redirect:/poll/vote/" + pluralityVoteForm.getPollId();
         }
 
+        User thisUser = userDao.findByName(votersUsername);
         int chosenCandidateId = pluralityVoteForm.getChosenCandidateId();
         Poll thisPoll = pollDao.findById(pluralityVoteForm.getPollId()).get();
         ArrayList<Candidate> candidates = new ArrayList<>(thisPoll.getCandidates());
@@ -102,6 +109,7 @@ public class PollController {
             if(candidate.getId() == chosenCandidateId)
             {
                 candidate.incrementPluralityVotes();
+                candidate.addVoter(thisUser);
                 candidateDao.save(candidate);
             }
         }
@@ -230,5 +238,14 @@ public class PollController {
         }
 
         return "redirect:/poll/" + rankedChoiceForm.getPollId();
+    }
+
+    // Poll List
+    @RequestMapping(value = "list")
+    public String pollList(Model model)
+    {
+        Iterable<Poll> allPolls = pollDao.findAll();
+        model.addAttribute("allPolls", allPolls);
+        return "poll-list";
     }
 }

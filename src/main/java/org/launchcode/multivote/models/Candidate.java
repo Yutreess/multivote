@@ -1,10 +1,11 @@
 package org.launchcode.multivote.models;
 
-import org.launchcode.multivote.models.forms.ApprovalVoteForm;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Candidate {
@@ -21,6 +22,10 @@ public class Candidate {
 
     @NotNull
     private String votingSystem;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "voters")
+    private List<User> voters;
 
     // Allowing a null property in cas ethe voting system isn't appropriate
     private int numPluralityVotes;
@@ -54,6 +59,12 @@ public class Candidate {
     public Candidate(String name)
     {
         this.name = name;
+    }
+
+    // Add Voter
+    public void addVoter(User voter)
+    {
+        this.voters.add(voter);
     }
 
     // Ranked Choice Counting
@@ -111,8 +122,15 @@ public class Candidate {
         this.votingSystem = votingSystem;
     }
 
-    // Ranked Choice
+    public List<User> getVoters() {
+        return voters;
+    }
 
+    public void setVoters(List<User> voters) {
+        this.voters = voters;
+    }
+
+    // Ranked Choice
 
     public int getRank1Votes() {
         return rank1Votes;

@@ -24,11 +24,26 @@ public class User {
     //@JoinColumn(name = "owned_poll_id")
     private List<Poll> polls = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "voters")
+    private List<Candidate> voteHistory;
+
     public User() {}
 
     public User(String name, String password) {
         this.name = name;
         this.password = password;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public List<Candidate> getVoteHistory() {
+        return voteHistory;
+    }
+
+    public void setVoteHistory(List<Candidate> voteHistory) {
+        this.voteHistory = voteHistory;
     }
 
     public String getName() {
@@ -55,7 +70,4 @@ public class User {
         this.polls = polls;
     }
 
-    public int getId() {
-        return id;
-    }
 }

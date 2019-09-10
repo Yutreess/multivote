@@ -8,6 +8,44 @@
         <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}">
         <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">
     </head>
+    <nav th:fragment="userNavbar" class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Log Out</a>
+                </li>
+                <!--
+                <li class="nav-item">
+                    <a class="nav-link" href="/sign-up">Sign Up</a>
+                </li>
+                -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/poll/list">Search Polls</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/faq">FAQ</a>
+                </li>
+            </ul>
+
+            <!-- Display "MultiVote" if no user is logged in,
+                 Display the username if one is -->
+            <div th:if="${user}">
+                <a th:href="@{/user-home/__${user.id}__}">
+                    <h3 class="navbar-brand"
+                        th:text="${user.name}">
+
+                    </h3>
+                </a>
+            </div>
+
+            <div th:unless="${user}">
+                <h3 class="navbar-brand">MultiVote</h3>
+            </div>
+
+        </div>
+
+    </nav>
 
     <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-primary">
 
@@ -30,14 +68,17 @@
             <!-- Display "MultiVote" if no user is logged in,
                  Display the username if one is -->
             <div th:if="${user}">
-                <h3 class="navbar-brand"
-                    th:text="${user.name}"></h3>
+                <a th:href="@{/user-home/__${user.id}__}">
+                    <h3 class="navbar-brand"
+                    th:text="${user.name}">
+
+                    </h3>
+                </a>
             </div>
 
             <div th:unless="${user}">
                 <h3 class="navbar-brand">MultiVote</h3>
             </div>
-
 
         </div>
 

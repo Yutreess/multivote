@@ -10,11 +10,15 @@ import org.launchcode.multivote.models.forms.LoginForm;
 import org.launchcode.multivote.models.forms.PluralityVoteForm;
 import org.launchcode.multivote.models.forms.PollForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.ArrayList;
 
@@ -81,7 +85,8 @@ public class MainController {
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public String logInUser(Model model,
                             @ModelAttribute @Valid LoginForm loginForm,
-                            Errors errors)
+                            Errors errors,
+                            HttpServletResponse response)
     {
         String formUsername = loginForm.getName();
         String formPassword = loginForm.getPassword();
@@ -91,6 +96,9 @@ public class MainController {
         {
             if (user.getPassword().equals(formPassword))
             {
+                Cookie userSession = new Cookie("username", user.getName());
+                userSession.setPath("/");
+                response.addCookie(userSession);
                 return "redirect:/user-home/" + user.getId();
             }
 
@@ -113,6 +121,29 @@ public class MainController {
         return "redirect:/";
     }
 
+    //Logout User
+    @RequestMapping(value = "logout")
+    public String logoutUser(Model model,
+                             HttpServletRequest request,
+                             HttpServletResponse response)
+    {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+        {
+            if(cookie.getName().equals("username"))
+            {
+                Cookie userSession = new Cookie("username", null);
+                userSession.setPath("/");
+                userSession.setMaxAge(0);
+                response.addCookie(userSession);
+
+                return "redirect:/";
+            }
+        }
+
+        return "redirect:/";
+    }
+
     // FAQ Page
     @RequestMapping(value = "faq")
     public String faq(Model model)
@@ -125,7 +156,8 @@ public class MainController {
     // User home page
     @RequestMapping(value = "user-home/{userId}", method = RequestMethod.GET)
     public String userHome(Model model,
-                           @PathVariable int userId)
+                           @PathVariable int userId,
+                           HttpServletResponse request)
     {
         //ArrayList<Poll> userPolls = pollDao.findAllByUser(userId);
         User thisUser = userDao.findById(userId).get();
@@ -157,7 +189,8 @@ public class MainController {
     public String createNewPoll(Model model,
                                 //@RequestParam("candidates") ArrayList<String> newCandidates,
                                 @ModelAttribute @Valid PollForm pollForm,
-                                Errors errors)
+                                Errors errors,
+                                HttpServletResponse request)
     {
         if (errors.hasErrors())
         {
@@ -180,7 +213,6 @@ public class MainController {
                 newCandidate.setPoll(newPoll);
                 newCandidate.setVotingSystem(newPollVotingSystem);
                 candidateDao.save(newCandidate);
-
                 candidateList.add(newCandidate);
             }
         }
