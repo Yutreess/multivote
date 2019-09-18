@@ -217,6 +217,7 @@ public class MainController {
             }
         }
         newPoll.setCandidates(candidateList);
+        newPoll.setPollClosingTime(pollForm.getMinutesToPollClose());
 
         pollDao.save(newPoll);
 

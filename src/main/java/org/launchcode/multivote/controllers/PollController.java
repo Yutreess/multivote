@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -40,9 +42,9 @@ public class PollController {
     {
         Poll thisPoll = pollDao.findById(pollId).get();
         model.addAttribute("poll", thisPoll);
-        Date dateCreated = thisPoll.getDateCreated().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm a");
 
-        String dateCreatedStr = dateCreated.toString();
+        String dateCreatedStr = dateFormat.format(thisPoll.getDateCreated().getTime());
         //model.addAttribute("title", thisPoll.getCandidates());
         model.addAttribute("dateCreated", dateCreatedStr);
         return "poll";
@@ -95,6 +97,7 @@ public class PollController {
     {
         if(errors.hasErrors())
         {
+
             System.out.println("Errors: " + errors.getAllErrors());
             return "voting-forms/plurality-vote";
             //return "redirect:/poll/vote/" + pluralityVoteForm.getPollId();
@@ -104,15 +107,22 @@ public class PollController {
         int chosenCandidateId = pluralityVoteForm.getChosenCandidateId();
         Poll thisPoll = pollDao.findById(pluralityVoteForm.getPollId()).get();
         ArrayList<Candidate> candidates = new ArrayList<>(thisPoll.getCandidates());
+        Date now = new Date();
 
-        //TODO: Use Cnadidate ID's instead of names, use names only for display
-        for(Candidate candidate : candidates)
+        if(now.after(thisPoll.getPollClosingTime()))
         {
-            if(candidate.getId() == chosenCandidateId)
+            return "redirect:/poll/" + pluralityVoteForm.getPollId();
+        }
+        else
+        {
+            for(Candidate candidate : candidates)
             {
-                candidate.incrementPluralityVotes();
-                candidate.addVoter(thisUser);
-                candidateDao.save(candidate);
+                if(candidate.getId() == chosenCandidateId)
+                {
+                    candidate.incrementPluralityVotes();
+                    candidate.addVoter(thisUser);
+                    candidateDao.save(candidate);
+                }
             }
         }
 
@@ -138,19 +148,23 @@ public class PollController {
         ArrayList<Integer> chosenCandidateIds = approvalVoteForm.getChosenCandidateIds();
         Poll thisPoll = pollDao.findById(approvalVoteForm.getPollId()).get();
         ArrayList<Candidate> candidates = new ArrayList<>(thisPoll.getCandidates());
+        Date now = new Date();
 
-        for (Candidate candidate : candidates)
+        if(now.after(thisPoll.getPollClosingTime()))
         {
-            if (chosenCandidateIds.contains(candidate.getId()))
-            {
-                candidate.incrementApprovalVotes();
-                candidateDao.save(candidate);
-            }
-
+            return "redirect:/poll/" + approvalVoteForm.getPollId();
         }
-        System.out.println("Chosen Candidate Ids (form): " + chosenCandidateIds);
-        System.out.println("Chosen Candidate Ids (request param): " + chosenCandidateIds);
-
+        else
+        {
+            for (Candidate candidate : candidates)
+            {
+                if (chosenCandidateIds.contains(candidate.getId()))
+                {
+                    candidate.incrementApprovalVotes();
+                    candidateDao.save(candidate);
+                }
+            }
+        }
 
         return "redirect:/poll/" + approvalVoteForm.getPollId();
     }
@@ -172,70 +186,78 @@ public class PollController {
 
         Poll thisPoll = pollDao.findById(rankedChoiceForm.getPollId()).get();
         ArrayList<Candidate> candidates = new ArrayList<>(thisPoll.getCandidates());
+        Date now = new Date();
 
         // Check for all 10 possible votes
 
-        for (Candidate candidate : candidates)
+        if(now.after(thisPoll.getPollClosingTime()))
         {
-
-            if (rankedChoiceForm.getRank1Candidate() == candidate.getId())
+            return "redirect:/poll/" + rankedChoiceForm.getPollId();
+        }
+        else
+        {
+            for (Candidate candidate : candidates)
             {
-                candidate.incrementRank1Votes();
-                candidateDao.save(candidate);
-            }
 
-            else if (rankedChoiceForm.getRank2Candidate() == candidate.getId())
-            {
-                candidate.incrementRank2Votes();
-                candidateDao.save(candidate);
-            }
+                if (rankedChoiceForm.getRank1Candidate() == candidate.getId())
+                {
+                    candidate.incrementRank1Votes();
+                    candidateDao.save(candidate);
+                }
 
-            else if (rankedChoiceForm.getRank3Candidate() == candidate.getId())
-            {
-                candidate.incrementRank3Votes();
-                candidateDao.save(candidate);
-            }
+                else if (rankedChoiceForm.getRank2Candidate() == candidate.getId())
+                {
+                    candidate.incrementRank2Votes();
+                    candidateDao.save(candidate);
+                }
 
-            else if (rankedChoiceForm.getRank4Candidate() == candidate.getId())
-            {
-                candidate.incrementRank4Votes();
-                candidateDao.save(candidate);
-            }
+                else if (rankedChoiceForm.getRank3Candidate() == candidate.getId())
+                {
+                    candidate.incrementRank3Votes();
+                    candidateDao.save(candidate);
+                }
 
-            else if (rankedChoiceForm.getRank5Candidate() == candidate.getId())
-            {
-                candidate.incrementRank5Votes();
-                candidateDao.save(candidate);
-            }
+                else if (rankedChoiceForm.getRank4Candidate() == candidate.getId())
+                {
+                    candidate.incrementRank4Votes();
+                    candidateDao.save(candidate);
+                }
 
-            else if (rankedChoiceForm.getRank6Candidate() == candidate.getId())
-            {
-                candidate.incrementRank6Votes();
-                candidateDao.save(candidate);
-            }
+                else if (rankedChoiceForm.getRank5Candidate() == candidate.getId())
+                {
+                    candidate.incrementRank5Votes();
+                    candidateDao.save(candidate);
+                }
 
-            else if (rankedChoiceForm.getRank7Candidate() == candidate.getId())
-            {
-                candidate.incrementRank7Votes();
-                candidateDao.save(candidate);
-            }
+                else if (rankedChoiceForm.getRank6Candidate() == candidate.getId())
+                {
+                    candidate.incrementRank6Votes();
+                    candidateDao.save(candidate);
+                }
 
-            else if (rankedChoiceForm.getRank8Candidate() == candidate.getId())
-            {
-                candidate.incrementRank8Votes();
-                candidateDao.save(candidate);
-            }
+                else if (rankedChoiceForm.getRank7Candidate() == candidate.getId())
+                {
+                    candidate.incrementRank7Votes();
+                    candidateDao.save(candidate);
+                }
 
-            else if (rankedChoiceForm.getRank9Candidate() == candidate.getId())
-            {
-                candidate.incrementRank9Votes();
-                candidateDao.save(candidate);
-            }
+                else if (rankedChoiceForm.getRank8Candidate() == candidate.getId())
+                {
+                    candidate.incrementRank8Votes();
+                    candidateDao.save(candidate);
+                }
 
-            else if (rankedChoiceForm.getRank10Candidate() == candidate.getId())
-            {
-                candidate.incrementRank10Votes();
-                candidateDao.save(candidate);
+                else if (rankedChoiceForm.getRank9Candidate() == candidate.getId())
+                {
+                    candidate.incrementRank9Votes();
+                    candidateDao.save(candidate);
+                }
+
+                else if (rankedChoiceForm.getRank10Candidate() == candidate.getId())
+                {
+                    candidate.incrementRank10Votes();
+                    candidateDao.save(candidate);
+                }
             }
         }
 

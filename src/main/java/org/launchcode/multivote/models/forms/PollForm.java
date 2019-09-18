@@ -1,12 +1,13 @@
 package org.launchcode.multivote.models.forms;
 
-import org.launchcode.multivote.models.Candidate;
-import org.launchcode.multivote.models.Poll;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PollForm {
 
@@ -14,6 +15,10 @@ public class PollForm {
 
     @NotNull
     private int userId;
+
+    @NotNull
+    @Positive
+    private int minutesToPollClose;
 
     @NotNull
     @Size(min = 1, max = 50)
@@ -31,6 +36,14 @@ public class PollForm {
     public PollForm (ArrayList<String> votingSystems)
     {
         this.allVotingSystems = votingSystems;
+    }
+
+    public int getMinutesToPollClose() {
+        return minutesToPollClose;
+    }
+
+    public void setMinutesToPollClose(int minutesToPollClose) {
+        this.minutesToPollClose = minutesToPollClose;
     }
 
     public int getUserId() {

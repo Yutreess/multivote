@@ -1,9 +1,12 @@
 package org.launchcode.multivote.models;
 
+import org.launchcode.multivote.models.data.DateManipulator;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,7 +20,9 @@ public class Poll {
     @Size(min = 1)
     private String name;
 
-    private final Calendar dateCreated = Calendar.getInstance();
+    private Date dateCreated = new Date();
+
+    private Date pollClosingTime;
 
     @NotNull
     private String votingSystem;
@@ -39,8 +44,22 @@ public class Poll {
         this.user = user;
     }
 
-    public Calendar getDateCreated() {
+    public Date getPollClosingTime() {
+        return pollClosingTime;
+    }
+
+    public void setPollClosingTime(int minutesToClose) {
+        DateManipulator dm = new DateManipulator();
+
+        this.pollClosingTime = dm.addMinutes(this.dateCreated, minutesToClose);
+    }
+
+    public Date getDateCreated() {
         return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public User getUser() {

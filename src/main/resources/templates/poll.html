@@ -61,9 +61,20 @@
         </div>
 
 
-        <form th:action="@{/poll/vote/} + ${poll.id}">
-            <button class="btn btn-success btn-block">Vote</button>
-        </form>
+        <div th:if="${poll.pollClosingTime.after(#dates.createNow())}">
+            <form th:action="@{/poll/vote/} + ${poll.id}">
+                <button class="btn btn-success btn-block">Vote</button>
+            </form>
+        </div>
+
+        <div th:unless="${poll.pollClosingTime.after(#dates.createNow())}">
+            <form th:action="@{/poll/vote/} + ${poll.id}">
+                <button class="btn btn-success btn-block"
+                        disabled="disabled">Voting Closed</button>
+            </form>
+        </div>
+
+        <h1 th:text="${#dates.format(#dates.createNow(), 'MM/dd/yyyy HH:mm a')}"></h1>
 
     </div>
 
