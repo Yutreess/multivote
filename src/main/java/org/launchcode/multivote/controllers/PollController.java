@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/poll/")
@@ -42,7 +40,11 @@ public class PollController {
     {
         Poll thisPoll = pollDao.findById(pollId).get();
         model.addAttribute("poll", thisPoll);
+        Date dateCreated = thisPoll.getDateCreated().getTime();
+
+        String dateCreatedStr = dateCreated.toString();
         //model.addAttribute("title", thisPoll.getCandidates());
+        model.addAttribute("dateCreated", dateCreatedStr);
         return "poll";
     }
 

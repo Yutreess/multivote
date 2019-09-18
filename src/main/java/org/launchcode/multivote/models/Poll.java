@@ -3,6 +3,7 @@ package org.launchcode.multivote.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Calendar;
 import java.util.List;
 
 @Entity
@@ -15,6 +16,8 @@ public class Poll {
     @NotNull
     @Size(min = 1)
     private String name;
+
+    private final Calendar dateCreated = Calendar.getInstance();
 
     @NotNull
     private String votingSystem;
@@ -34,6 +37,10 @@ public class Poll {
         this.name = name;
         this.votingSystem = votingSystem;
         this.user = user;
+    }
+
+    public Calendar getDateCreated() {
+        return dateCreated;
     }
 
     public User getUser() {
