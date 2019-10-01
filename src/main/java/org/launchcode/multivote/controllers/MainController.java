@@ -7,10 +7,8 @@ import org.launchcode.multivote.models.data.CandidateDao;
 import org.launchcode.multivote.models.data.PollDao;
 import org.launchcode.multivote.models.data.UserDao;
 import org.launchcode.multivote.models.forms.LoginForm;
-import org.launchcode.multivote.models.forms.PluralityVoteForm;
 import org.launchcode.multivote.models.forms.PollForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -73,8 +71,18 @@ public class MainController {
 
     // Display Login form
     @RequestMapping(value = "login", method = RequestMethod.GET)
-    public String loginForm(Model model)
+    public String loginForm(Model model,
+                            HttpServletRequest request)
     {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+        {
+            if (cookie.getName().equals("username"))
+            {
+                User thisUser = userDao.findByName(cookie.getValue());
+                model.addAttribute("user", thisUser);
+            }
+        }
         model.addAttribute("loginForm", new LoginForm());
         model.addAttribute("title", "Login");
 
@@ -146,8 +154,19 @@ public class MainController {
 
     // FAQ Page
     @RequestMapping(value = "faq")
-    public String faq(Model model)
+    public String faq(Model model,
+                      HttpServletRequest request)
     {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+        {
+            if (cookie.getName().equals("username"))
+            {
+                User thisUser = userDao.findByName(cookie.getValue());
+                model.addAttribute("user", thisUser);
+            }
+        }
+
         model.addAttribute("title", "FAQ");
         return "faq";
     }
@@ -157,21 +176,39 @@ public class MainController {
     @RequestMapping(value = "user-home/{userId}", method = RequestMethod.GET)
     public String userHome(Model model,
                            @PathVariable int userId,
-                           HttpServletResponse request)
+                           HttpServletRequest request)
     {
-        //ArrayList<Poll> userPolls = pollDao.findAllByUser(userId);
-        User thisUser = userDao.findById(userId).get();
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+        {
+            if (cookie.getName().equals("username"))
+            {
+                User thisUser = userDao.findByName(cookie.getValue());
+                model.addAttribute("user", thisUser);
+            }
+        }
+
         model.addAttribute("title", "MultiVote User");
-        model.addAttribute("user", thisUser);
+        //model.addAttribute("user", thisUser);
         return "user-home";
     }
 
     // Display Create Poll Form
     @RequestMapping(value = "new-poll/{userId}", method = RequestMethod.GET)
     public String newPoll(Model model,
-                          @PathVariable int userId)
+                          @PathVariable int userId,
+                          HttpServletRequest request)
     {
-        User thisUser = userDao.findById(userId).get();
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+        {
+            if (cookie.getName().equals("username"))
+            {
+                User thisUser = userDao.findByName(cookie.getValue());
+                model.addAttribute("user", thisUser);
+            }
+        }
+
         ArrayList<String> allVotingSystems = new ArrayList<>();
         allVotingSystems.add("Plurality");
         allVotingSystems.add("Ranked Choice");
@@ -179,7 +216,6 @@ public class MainController {
 
         model.addAttribute("newPoll",new PollForm(allVotingSystems));
         model.addAttribute("title", "Create Poll");
-        model.addAttribute("user", thisUser);
 
         return "new-poll";
     }

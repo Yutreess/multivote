@@ -15,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.text.DateFormat;
@@ -38,8 +40,19 @@ public class PollController {
     // Main Poll page
     @RequestMapping(value = "{pollId}")
     public String poll(Model model,
-                       @PathVariable int pollId)
+                       @PathVariable int pollId,
+                       HttpServletRequest request)
     {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+        {
+            if (cookie.getName().equals("username"))
+            {
+                User thisUser = userDao.findByName(cookie.getValue());
+                model.addAttribute("user", thisUser);
+            }
+        }
+
         Poll thisPoll = pollDao.findById(pollId).get();
         model.addAttribute("poll", thisPoll);
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm a");
@@ -53,8 +66,19 @@ public class PollController {
     // Vote Forms
     @RequestMapping(value = "vote/{pollId}", method = RequestMethod.GET)
     public String voteForms(Model model,
-                            @PathVariable int pollId)
+                            @PathVariable int pollId,
+                            HttpServletRequest request)
     {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+        {
+            if (cookie.getName().equals("username"))
+            {
+                User thisUser = userDao.findByName(cookie.getValue());
+                model.addAttribute("user", thisUser);
+            }
+        }
+
         Poll thisPoll = pollDao.findById(pollId).get();
         ArrayList<Candidate> candidates = new ArrayList<>(thisPoll.getCandidates());
 
@@ -134,17 +158,21 @@ public class PollController {
     public String processApprovalVote(Model model,
                                       @ModelAttribute("approvalVoteForm") @Valid
                                       ApprovalVoteForm approvalVoteForm,
-                                      Errors errors)
+                                      Errors errors,
+                                      HttpServletRequest request,
+                                      @CookieValue(value = "username")
+                                      String votersUsername)
     {
 
         if (errors.hasErrors())
         {
             System.out.println(approvalVoteForm);
             System.out.println("Errors: " + errors.getAllErrors());
-            voteForms(model, approvalVoteForm.getPollId());
+            voteForms(model, approvalVoteForm.getPollId(), request);
             return "voting-forms/approval-vote";
         }
 
+        User thisUser = userDao.findByName(votersUsername);
         ArrayList<Integer> chosenCandidateIds = approvalVoteForm.getChosenCandidateIds();
         Poll thisPoll = pollDao.findById(approvalVoteForm.getPollId()).get();
         ArrayList<Candidate> candidates = new ArrayList<>(thisPoll.getCandidates());
@@ -161,6 +189,7 @@ public class PollController {
                 if (chosenCandidateIds.contains(candidate.getId()))
                 {
                     candidate.incrementApprovalVotes();
+                    candidate.addVoter(thisUser);
                     candidateDao.save(candidate);
                 }
             }
@@ -174,16 +203,20 @@ public class PollController {
     public String countRCVotes(Model model,
                                @ModelAttribute("rankedChoiceForm") @Valid
                                RCVForm rankedChoiceForm,
-                               Errors errors)
+                               Errors errors,
+                               HttpServletRequest request,
+                               @CookieValue(value = "username")
+                               String votersUsername)
     {
         if (errors.hasErrors() || !rankedChoiceForm.checkVotesAreUnique())
         {
             System.out.println(rankedChoiceForm);
             System.out.println("Errors: " + errors.getAllErrors());
-            voteForms(model, rankedChoiceForm.getPollId());
+            voteForms(model, rankedChoiceForm.getPollId(), request);
             return "voting-forms/ranked-choice-vote";
         }
 
+        User thisUser = userDao.findByName(votersUsername);
         Poll thisPoll = pollDao.findById(rankedChoiceForm.getPollId()).get();
         ArrayList<Candidate> candidates = new ArrayList<>(thisPoll.getCandidates());
         Date now = new Date();
@@ -202,60 +235,70 @@ public class PollController {
                 if (rankedChoiceForm.getRank1Candidate() == candidate.getId())
                 {
                     candidate.incrementRank1Votes();
+                    candidate.addVoter(thisUser);
                     candidateDao.save(candidate);
                 }
 
                 else if (rankedChoiceForm.getRank2Candidate() == candidate.getId())
                 {
                     candidate.incrementRank2Votes();
+                    candidate.addVoter(thisUser);
                     candidateDao.save(candidate);
                 }
 
                 else if (rankedChoiceForm.getRank3Candidate() == candidate.getId())
                 {
                     candidate.incrementRank3Votes();
+                    candidate.addVoter(thisUser);
                     candidateDao.save(candidate);
                 }
 
                 else if (rankedChoiceForm.getRank4Candidate() == candidate.getId())
                 {
                     candidate.incrementRank4Votes();
+                    candidate.addVoter(thisUser);
                     candidateDao.save(candidate);
                 }
 
                 else if (rankedChoiceForm.getRank5Candidate() == candidate.getId())
                 {
                     candidate.incrementRank5Votes();
+                    candidate.addVoter(thisUser);
                     candidateDao.save(candidate);
                 }
 
                 else if (rankedChoiceForm.getRank6Candidate() == candidate.getId())
                 {
                     candidate.incrementRank6Votes();
+                    candidate.addVoter(thisUser);
                     candidateDao.save(candidate);
                 }
 
                 else if (rankedChoiceForm.getRank7Candidate() == candidate.getId())
                 {
                     candidate.incrementRank7Votes();
+                    candidate.addVoter(thisUser);
                     candidateDao.save(candidate);
                 }
 
                 else if (rankedChoiceForm.getRank8Candidate() == candidate.getId())
                 {
                     candidate.incrementRank8Votes();
+                    candidate.addVoter(thisUser);
                     candidateDao.save(candidate);
                 }
 
                 else if (rankedChoiceForm.getRank9Candidate() == candidate.getId())
                 {
                     candidate.incrementRank9Votes();
+                    candidate.addVoter(thisUser);
                     candidateDao.save(candidate);
                 }
 
                 else if (rankedChoiceForm.getRank10Candidate() == candidate.getId())
                 {
                     candidate.incrementRank10Votes();
+                    candidate.addVoter(thisUser);
                     candidateDao.save(candidate);
                 }
             }
@@ -266,8 +309,19 @@ public class PollController {
 
     // Poll List
     @RequestMapping(value = "list")
-    public String pollList(Model model)
+    public String pollList(Model model,
+                           HttpServletRequest request)
     {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+        {
+            if (cookie.getName().equals("username"))
+            {
+                User thisUser = userDao.findByName(cookie.getValue());
+                model.addAttribute("user", thisUser);
+            }
+        }
+
         Iterable<Poll> allPolls = pollDao.findAll();
         model.addAttribute("allPolls", allPolls);
         return "poll-list";
