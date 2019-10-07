@@ -74,7 +74,7 @@
             </form>
         </div>
 
-        <div th:if="${user.id} == ${poll.user.id}" class="container">
+        <div th:if="${user}? 'null' : false == ${poll.user}" class="container">
             <div class="row">
                 <div class="col-6">
                     <h3 class="text-center">Voter</h3>

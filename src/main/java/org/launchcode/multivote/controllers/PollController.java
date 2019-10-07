@@ -1,5 +1,6 @@
 package org.launchcode.multivote.controllers;
 
+import org.apache.coyote.Response;
 import org.launchcode.multivote.models.Candidate;
 import org.launchcode.multivote.models.Poll;
 import org.launchcode.multivote.models.User;
@@ -69,6 +70,21 @@ public class PollController {
                             @PathVariable int pollId,
                             HttpServletRequest request)
     {
+        boolean userLoggedIn = false;
+
+        // Users who aren't signed in cannot vote
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+        {
+            if (cookie.getName().equals("username"))
+            {
+                User thisUser = userDao.findByName(cookie.getValue());
+                model.addAttribute("user", thisUser);
+                userLoggedIn = true;
+            }
+        }
+        /*
+
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies)
         {
@@ -77,6 +93,16 @@ public class PollController {
                 User thisUser = userDao.findByName(cookie.getValue());
                 model.addAttribute("user", thisUser);
             }
+            else
+            {
+                return "redirect:/sign-up";
+            }
+        }
+        */
+
+        if (!userLoggedIn)
+        {
+            return "redirect:/sign-up";
         }
 
         Poll thisPoll = pollDao.findById(pollId).get();
@@ -168,7 +194,6 @@ public class PollController {
         {
             System.out.println(approvalVoteForm);
             System.out.println("Errors: " + errors.getAllErrors());
-            voteForms(model, approvalVoteForm.getPollId(), request);
             return "voting-forms/approval-vote";
         }
 
@@ -212,7 +237,6 @@ public class PollController {
         {
             System.out.println(rankedChoiceForm);
             System.out.println("Errors: " + errors.getAllErrors());
-            voteForms(model, rankedChoiceForm.getPollId(), request);
             return "voting-forms/ranked-choice-vote";
         }
 
