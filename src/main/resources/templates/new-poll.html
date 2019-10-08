@@ -69,9 +69,20 @@
             </div>
 
             <div class="form-group">
+                <label th:for="daysToPollClose">Voting Time (in days):</label>
+                <input th:field="*{daysToPollClose}" class="form-control"/>
+                <span th:errors="*{daysToPollClose}" class="error"></span>
+
+                <label th:for="hoursToPollClose">Voting Time (in hours):</label>
+                <input th:field="*{hoursToPollClose}" class="form-control"/>
+                <span th:errors="*{hoursToPollClose}" class="error"></span>
+
                 <label th:for="minutesToPollClose">Voting Time (in minutes):</label>
                 <input th:field="*{minutesToPollClose}" class="form-control"/>
                 <span th:errors="*{minutesToPollClose}" class="error"></span>
+
+                <p>*Note, if all fields are empty, your poll will
+                close after 1 hour by default.</p>
             </div>
 
             <input type="hidden" name="userId" th:value="${user.id}"/>

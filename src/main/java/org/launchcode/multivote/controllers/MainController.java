@@ -237,6 +237,9 @@ public class MainController {
         User thisUser = userDao.findById(pollForm.getUserId()).get();
         String newPollName = pollForm.getName();
         String newPollVotingSystem = pollForm.getVotingSystem();
+        int daysToPollClose = pollForm.getDaysToPollClose();
+        int hoursToPollClose = pollForm.getHoursToPollClose();
+        int minutesToPollClose = pollForm.getMinutesToPollClose();
 
         Poll newPoll = new Poll(newPollName, newPollVotingSystem, thisUser);
         newPoll.setUser(thisUser);
@@ -253,7 +256,7 @@ public class MainController {
             }
         }
         newPoll.setCandidates(candidateList);
-        newPoll.setPollClosingTime(pollForm.getMinutesToPollClose());
+        newPoll.setPollClosingTime(daysToPollClose, hoursToPollClose, minutesToPollClose);
 
         pollDao.save(newPoll);
 

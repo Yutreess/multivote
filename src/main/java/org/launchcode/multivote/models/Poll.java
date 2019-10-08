@@ -47,10 +47,26 @@ public class Poll {
         return pollClosingTime;
     }
 
-    public void setPollClosingTime(int minutesToClose) {
+    // Set Poll Closing time
+    public void setPollClosingTime(int daysToClose,
+                                   int hoursToClose,
+                                   int minutesToClose) {
         DateManipulator dm = new DateManipulator();
+        Date closingTime = this.dateCreated;
 
-        this.pollClosingTime = dm.addMinutes(this.dateCreated, minutesToClose);
+        if (daysToClose == 0
+            && hoursToClose == 0
+            && minutesToClose == 0)
+        {
+            this.pollClosingTime = dm.addHours(this.dateCreated, 1);
+        }
+        else
+        {
+            closingTime = dm.addDays(closingTime, daysToClose);
+            closingTime = dm.addHours(closingTime, hoursToClose);
+            closingTime = dm.addMinutes(closingTime, minutesToClose);
+            this.pollClosingTime = closingTime;
+        }
     }
 
     public Date getDateCreated() {

@@ -13,7 +13,8 @@
     <div class="container">
         <h1 th:text="${poll.name}">Poll Name</h1>
         <h2 class="text-center" th:text="${poll.votingSystem}"></h2>
-        <h5 class="text-center" th:text="${dateCreated}"></h5>
+        <h5 class="text-center" th:text="'Created at: ' + ${dateCreated}"></h5>
+        <h5 class="text-center" th:text="'Voting Ends at: ' + ${pollClosingTime}"></h5>
 
         <div class="row">
             <div class="col-6">

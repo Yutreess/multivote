@@ -59,8 +59,10 @@ public class PollController {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm a");
 
         String dateCreatedStr = dateFormat.format(thisPoll.getDateCreated().getTime());
+        String pollClosingTimeStr = dateFormat.format(thisPoll.getPollClosingTime().getTime());
         //model.addAttribute("title", thisPoll.getCandidates());
         model.addAttribute("dateCreated", dateCreatedStr);
+        model.addAttribute("pollClosingTime", pollClosingTimeStr);
         return "poll";
     }
 

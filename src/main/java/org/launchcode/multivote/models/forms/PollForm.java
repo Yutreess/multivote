@@ -5,6 +5,7 @@ import org.springframework.format.annotation.NumberFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,8 +17,17 @@ public class PollForm {
     @NotNull
     private int userId;
 
+    // Poll Voting Hours
     @NotNull
-    @Positive
+    @PositiveOrZero
+    private int daysToPollClose;
+
+    @NotNull
+    @PositiveOrZero
+    private int hoursToPollClose;
+
+    @NotNull
+    @PositiveOrZero
     private int minutesToPollClose;
 
     @NotNull
@@ -36,6 +46,22 @@ public class PollForm {
     public PollForm (ArrayList<String> votingSystems)
     {
         this.allVotingSystems = votingSystems;
+    }
+
+    public int getDaysToPollClose() {
+        return daysToPollClose;
+    }
+
+    public void setDaysToPollClose(int daysToPollClose) {
+        this.daysToPollClose = daysToPollClose;
+    }
+
+    public int getHoursToPollClose() {
+        return hoursToPollClose;
+    }
+
+    public void setHoursToPollClose(int hoursToPollClose) {
+        this.hoursToPollClose = hoursToPollClose;
     }
 
     public int getMinutesToPollClose() {
