@@ -8,6 +8,7 @@
         <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}">
         <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">
     </head>
+
     <nav th:fragment="userNavbar" class="navbar navbar-expand-lg navbar-dark bg-primary">
 
         <div class="collapse navbar-collapse" id="navbarColor01">
@@ -21,7 +22,10 @@
                 </li>
                 -->
                 <li class="nav-item">
-                    <a class="nav-link" href="/poll/list">Search Polls</a>
+                    <a class="nav-link" href="/search">Search Polls</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/poll/list">Poll List</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/faq">FAQ</a>
@@ -53,6 +57,12 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/search">Search Polls</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/poll/list">Poll List</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/sign-up">Sign Up</a>

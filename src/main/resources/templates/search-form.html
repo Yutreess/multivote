@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+
+    <head th:replace="fragments :: head"></head>
+    <body>
+
+    <nav th:replace="fragments :: navbar"></nav>
+
+    <div class="container">
+
+        <form th:object="${searchForm}" method="post" action="/search">
+            <div class="form-group">
+
+                <label th:for="term">Search Term:</label>
+                <input th:field="*{term}" class="form-control"/>
+                <span th:errors="*{term}" class="error"></span>
+
+            </div>
+
+            <input class="form-control" type="submit" value="Search"/>
+
+        </form>
+
+    </div>
+
+    <div th:if="${results}" class="container">
+
+        <div th:each="poll : ${results}">
+            <a th:href="@{/poll/} + ${poll.id}">
+                <h2 th:text="${poll.name} + ' by: ' + ${poll.user.name}">
+
+                </h2>
+            </a>
+        </div>
+
+    </div>
+
+    </body>
+</html>
