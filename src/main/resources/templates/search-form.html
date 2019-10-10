@@ -49,7 +49,33 @@
 
                 </div>
 
-                <span th:errors="*{searchedVotingSystems}"></span>
+                <span th:errors="*{searchedVotingSystems}" class="error"></span>
+
+            </div>
+
+            <div class="form-group">
+
+                <div class="custom-control custom-checkbox">
+
+                    <input name="searchTermArea"
+                           id="Poll Name"
+                           value="Poll Name"
+                           type="checkbox" checked class="custom-control-input" />
+                    <label for="Poll Name" class="custom-control-label">Poll Name</label>
+
+                </div>
+
+                <div class="custom-control custom-checkbox">
+
+                    <input name="searchTermArea"
+                           id="Host Name"
+                           value="Host Name"
+                           type="checkbox" checked class="custom-control-input" />
+                    <label for="Host Name" class="custom-control-label">Host Name</label>
+
+                </div>
+
+                <span th:errors="*{searchTermArea}" class="errors"></span>
 
             </div>
 

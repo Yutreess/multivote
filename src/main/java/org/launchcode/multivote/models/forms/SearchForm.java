@@ -12,11 +12,23 @@ public class SearchForm {
     @Size(min = 1, message = "Please select at least one voting system")
     private ArrayList<String> searchedVotingSystems;
 
+    @NotNull
+    @Size(min = 1, message = "Please select at least one area to search for the keyword")
+    private ArrayList<String> searchTermArea;
+
     public SearchForm() {}
 
     public SearchForm(String term)
     {
         this.term = term;
+    }
+
+    public ArrayList<String> getSearchTermArea() {
+        return searchTermArea;
+    }
+
+    public void setSearchTermArea(ArrayList<String> searchTermArea) {
+        this.searchTermArea = searchTermArea;
     }
 
     public ArrayList<String> getSearchedVotingSystems() {

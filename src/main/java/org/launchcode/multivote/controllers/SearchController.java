@@ -1,6 +1,7 @@
 package org.launchcode.multivote.controllers;
 
 import org.launchcode.multivote.models.Poll;
+import org.launchcode.multivote.models.User;
 import org.launchcode.multivote.models.data.CandidateDao;
 import org.launchcode.multivote.models.data.PollDao;
 import org.launchcode.multivote.models.data.UserDao;
@@ -53,11 +54,18 @@ public class SearchController {
         Iterable<Poll> allPolls = pollDao.findAll();
         ArrayList<Poll> searchResults = new ArrayList<>();
         ArrayList<String> acceptedVotingSystems = searchForm.getSearchedVotingSystems();
+        ArrayList<String> acceptedSearchTermAreas = searchForm.getSearchTermArea();
 
         for (Poll poll : allPolls)
         {
-            if (poll.getName().contains(term)
-                && acceptedVotingSystems.contains(poll.getVotingSystem()))
+            if (acceptedSearchTermAreas.contains("Poll Name")
+                && acceptedVotingSystems.contains(poll.getVotingSystem())
+                && poll.getName().toUpperCase().contains(term.toUpperCase()))
+            {
+                searchResults.add(poll);
+            }
+            else if (acceptedSearchTermAreas.contains("Host Name")
+                     && poll.getUser().getName().toUpperCase().contains(term.toUpperCase()))
             {
                 searchResults.add(poll);
             }
