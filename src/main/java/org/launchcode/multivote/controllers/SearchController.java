@@ -8,10 +8,12 @@ import org.launchcode.multivote.models.forms.SearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 
 @Controller
@@ -38,15 +40,24 @@ public class SearchController {
 
     @RequestMapping(value="", method = RequestMethod.POST)
     public String returnResults(Model model,
-                                @ModelAttribute SearchForm searchForm)
+                                @ModelAttribute @Valid SearchForm searchForm,
+                                Errors errors)
     {
+        if (errors.hasErrors())
+        {
+            System.out.println("Errors: " + errors.getAllErrors());
+            return "search-form";
+        }
+
         String term = searchForm.getTerm();
         Iterable<Poll> allPolls = pollDao.findAll();
         ArrayList<Poll> searchResults = new ArrayList<>();
+        ArrayList<String> acceptedVotingSystems = searchForm.getSearchedVotingSystems();
 
         for (Poll poll : allPolls)
         {
-            if (poll.getName().contains(term))
+            if (poll.getName().contains(term)
+                && acceptedVotingSystems.contains(poll.getVotingSystem()))
             {
                 searchResults.add(poll);
             }
@@ -54,6 +65,7 @@ public class SearchController {
 
         model.addAttribute("title", "Search Polls");
         model.addAttribute("results", searchResults);
+
 
         return "search-form";
     }

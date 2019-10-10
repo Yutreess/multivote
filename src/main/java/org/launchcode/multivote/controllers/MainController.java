@@ -192,4 +192,75 @@ public class MainController {
         return "user-home";
     }
 
+    // Display Create Poll Form
+    @RequestMapping(value = "new-poll/{userId}", method = RequestMethod.GET)
+    public String newPoll(Model model,
+                          @PathVariable int userId,
+                          HttpServletRequest request)
+    {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+        {
+            if (cookie.getName().equals("username"))
+            {
+                User thisUser = userDao.findByName(cookie.getValue());
+                model.addAttribute("user", thisUser);
+            }
+        }
+
+        ArrayList<String> allVotingSystems = new ArrayList<>();
+        allVotingSystems.add("Plurality");
+        allVotingSystems.add("Ranked Choice");
+        allVotingSystems.add("Approval");
+
+        model.addAttribute("newPoll",new PollForm(allVotingSystems));
+        model.addAttribute("title", "Create Poll");
+
+        return "new-poll";
+    }
+
+    // Process Create Poll Form
+    @RequestMapping(value = "new-poll", method = RequestMethod.POST)
+    public String createNewPoll(Model model,
+                                //@RequestParam("candidates") ArrayList<String> newCandidates,
+                                @ModelAttribute @Valid PollForm pollForm,
+                                Errors errors,
+                                HttpServletResponse request)
+    {
+        if (errors.hasErrors())
+        {
+            return "redirect:/new-poll/" + pollForm.getUserId();
+        }
+
+        ArrayList<Candidate> candidateList = new ArrayList<>();
+        User thisUser = userDao.findById(pollForm.getUserId()).get();
+        String newPollName = pollForm.getName();
+        String newPollVotingSystem = pollForm.getVotingSystem();
+        int daysToPollClose = pollForm.getDaysToPollClose();
+        int hoursToPollClose = pollForm.getHoursToPollClose();
+        int minutesToPollClose = pollForm.getMinutesToPollClose();
+
+        Poll newPoll = new Poll(newPollName, newPollVotingSystem, thisUser);
+        newPoll.setUser(thisUser);
+
+        for(String candidateName : pollForm.getCandidates())
+        {
+            if(!candidateName.equals(""))
+            {
+                Candidate newCandidate = new Candidate(candidateName);
+                newCandidate.setPoll(newPoll);
+                newCandidate.setVotingSystem(newPollVotingSystem);
+                candidateDao.save(newCandidate);
+                candidateList.add(newCandidate);
+            }
+        }
+        newPoll.setCandidates(candidateList);
+        newPoll.setPollClosingTime(daysToPollClose, hoursToPollClose, minutesToPollClose);
+
+        pollDao.save(newPoll);
+
+
+        return "redirect:/user-home/" + pollForm.getUserId();
+    }
+
 }

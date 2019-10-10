@@ -17,7 +17,7 @@
                     <input name="chosenCandidateIds"
                            th:id="'candidate' + ${candidate.id}"
                            th:value="${candidate.id}"
-                           type="checkbox" class="custom-control-input" checked="" />
+                           type="checkbox" class="custom-control-input"/>
 
                     <label th:for="'candidate' + ${candidate.id}" th:text="${candidate.name}" class="custom-control-label" ></label>
                     <span th:errors="*{chosenCandidateIds}" class="error"></span>
