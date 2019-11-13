@@ -1,6 +1,7 @@
 package org.launchcode.multivote.controllers;
 
 import org.apache.coyote.Response;
+import org.launchcode.multivote.models.data.DateManipulator;
 import org.launchcode.multivote.models.Candidate;
 import org.launchcode.multivote.models.Poll;
 import org.launchcode.multivote.models.User;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.*;
 
 @Controller
@@ -61,9 +63,11 @@ public class PollController {
 
         String dateCreatedStr = dateFormat.format(thisPoll.getDateCreated().getTime());
         String pollClosingTimeStr = dateFormat.format(thisPoll.getPollClosingTime().getTime());
+
         //model.addAttribute("title", thisPoll.getCandidates());
         model.addAttribute("dateCreated", dateCreatedStr);
         model.addAttribute("pollClosingTime", pollClosingTimeStr);
+
         return "poll";
     }
 

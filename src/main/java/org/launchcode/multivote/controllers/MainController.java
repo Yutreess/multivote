@@ -106,7 +106,7 @@ public class MainController {
                 Cookie userSession = new Cookie("username", user.getName());
                 userSession.setPath("/");
                 response.addCookie(userSession);
-                return "redirect:/user-home/" + user.getId();
+                return "redirect:/user-home/" + user.getName();
             }
 
             else
@@ -172,9 +172,9 @@ public class MainController {
 
 
     // User home page
-    @RequestMapping(value = "user-home/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "user-home/{username}", method = RequestMethod.GET)
     public String userHome(Model model,
-                           @PathVariable int userId,
+                           @PathVariable String username,
                            HttpServletRequest request)
     {
         Cookie[] cookies = request.getCookies();
@@ -193,9 +193,9 @@ public class MainController {
     }
 
     // Display Create Poll Form
-    @RequestMapping(value = "new-poll/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "new-poll/{username}", method = RequestMethod.GET)
     public String newPoll(Model model,
-                          @PathVariable int userId,
+                          @PathVariable String username,
                           HttpServletRequest request)
     {
         Cookie[] cookies = request.getCookies();
